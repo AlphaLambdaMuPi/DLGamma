@@ -3,6 +3,8 @@ from os.path import join as pjoin
 import sys
 import string
 import re
+import numpy as np
+from read_data import word2vec
 
 def qmap(mp, x):
     if x not in mp: return 0
@@ -11,6 +13,11 @@ def qmap(mp, x):
 def amap(mp, x):
     if x not in mp: mp[x] = 0
     mp[x] += 1
+
+def cosdist(x, y):
+    x1 = np.array(x)
+    y1 = np.array(y)
+    return np.dot(x1, y1) / (np.linalg.norm(x1) * np.linalg.norm(y1))
 
 DATA_PATH = '../data'
 TRAIN_PATH = pjoin(DATA_PATH, 'Holmes_Training_Data')
@@ -23,7 +30,10 @@ test_data_raw = [x.strip('\n') for x in test_data_raw]
 mp_word = {}
 mp_bigram = {}
 
+s = []
+
 for cnt, filename in enumerate(filename_list):
+    break
     # if cnt >= 10: break
     print('Reading', cnt, filename)
     rs = open(pjoin(TRAIN_PATH, filename), encoding='latin-1').read()
@@ -31,6 +41,10 @@ for cnt, filename in enumerate(filename_list):
     rs = re.split('[^a-zA-Z0-9-\']', rs)
     rs = list(filter(lambda x: x, rs))
     rs = [x.lower() for x in rs]
+
+    # for i in rs:
+        # s.append(i)
+    # continue
 
     for i in rs:
         amap(mp_word, i)
@@ -50,13 +64,13 @@ ques_bigram = []
 for i in range(len(test_data_raw)//5):
     rr = test_data_raw[i*5:(i+1)*5]
     rr = [x[x.find(' ')+1:] for x in rr]
-    rr = [re.split('[^a-zA-Z0-9-\'\[\]]', x) for x in rr]
+    rr = [re.split('[^a-zA-Z0-9-\[\]]', x.lower()) for x in rr]
     rr = [list(filter(lambda y: y, x)) for x in rr]
 
     qs = []
     ctx = []
     for j in rr:
-        ls = [x.lower() for x in j]
+        ls = [x for x in j]
         for k, s in enumerate(ls):
             if s[0] == '[':
                 qs.append(s[1:-1])
@@ -69,14 +83,14 @@ english = 'abcde'
 
 for qs, ctx in zip(ques, ques_bigram):
     print(qs, ctx)
-    w1 = qmap(mp_word, ctx[0]) + 1
-    w2 = qmap(mp_word, ctx[1]) + 1
     ans_id = -1
     best_score = -1
     for c, i in enumerate(qs):
-        score = 1
+        ivec = word2vec(i)
+        score = -1
         for j in ctx:
-            score += qmap(mp_bigram, (j, i))
+            jvec = word2vec(j)
+            score = max(score, cosdist(ivec, jvec))
         if score > best_score:
             ans_id = c
             best_score = score
@@ -84,7 +98,7 @@ for qs, ctx in zip(ques, ques_bigram):
     print(ans_id, qs[ans_id])
     ans_list.append(english[ans_id])
 
-f = open('output2.txt', 'w')
+f = open('output.txt', 'w')
 f.write('id,answer\n')
 for i, j in enumerate(ans_list):
     f.write('{},{}\n'.format(i+1, j))
