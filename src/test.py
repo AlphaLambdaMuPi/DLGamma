@@ -87,10 +87,11 @@ for qs, ctx in zip(ques, ques_bigram):
     best_score = -1
     for c, i in enumerate(qs):
         ivec = word2vec(i)
-        score = -1
+        score = 0
         for j in ctx:
             jvec = word2vec(j)
-            score = max(score, cosdist(ivec, jvec))
+            score += cosdist(ivec, jvec)
+        score /= len(ctx)
         if score > best_score:
             ans_id = c
             best_score = score
@@ -98,7 +99,7 @@ for qs, ctx in zip(ques, ques_bigram):
     print(ans_id, qs[ans_id])
     ans_list.append(english[ans_id])
 
-f = open('output.txt', 'w')
+f = open('outputz.txt', 'w')
 f.write('id,answer\n')
 for i, j in enumerate(ans_list):
     f.write('{},{}\n'.format(i+1, j))

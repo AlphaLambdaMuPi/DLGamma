@@ -1,3 +1,6 @@
 data
+*.swp
+*.tgz
 __pycache__
 word2vec
+*.pyc
