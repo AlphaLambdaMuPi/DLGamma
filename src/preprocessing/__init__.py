@@ -5,7 +5,7 @@ from progressbar import ProgressBar, Bar
 from utils import rcompose
 import re
 
-def raw_to_sentences():
+def preproc_train(funcs):
     files = os.listdir(PATH['raw_data'])
 
     with ProgressBar(maxval=len(files)) as prog:
@@ -25,9 +25,6 @@ def raw_to_sentences():
             res = rcompose(funcs)(raw_s)
             prog.update(cnt+1)
             yield res
-
-def split_line():
-    pass
 
 def remove_evil_ms_linebreak(s):
     res = re.sub(r'\r', '', s)

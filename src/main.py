@@ -1,12 +1,34 @@
-import os
-from os.path import join as pjoin
-from preprocessing import raw_to_sentences
+#!/usr/bin/env python3
+import sys, os
 from settings import *
+import argparse
+import importlib
 
-if not os.path.isdir(PATH['proc_data']):
-    os.mkdir(PATH['proc_data'])
+class Main():
+    def __init__(self):
+        parser = argparse.ArgumentParser()
+        subpars = parser.add_argument('profile', type=str, nargs='?')
 
-with open(pjoin(PATH['proc_data'], 'train_sentences.txt'), 'w') as f:
-    for x in raw_to_sentences():
-        f.write(x)
 
+        args = parser.parse_args()
+
+        if args.profile is not None:
+            self.run(args.profile)
+        else:
+            s = input('Input profile name: ')
+            self.run(s)
+
+    def run(self, profile):
+        P = importlib.import_module('profile_scripts.{}'.format(profile))
+        ex = P.Profile()
+        try:
+          ex.start()
+        except KeyboardInterrupt:
+          pass
+        finally:
+          ex.end()
+
+def main():
+    Main()
+
+main()
