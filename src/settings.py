@@ -9,3 +9,4 @@ PATH['data'] = abspath(pjoin(PATH['root'], 'data'))
 PATH['raw_data'] = abspath(pjoin(PATH['data'], 'Holmes_Training_Data'))
 PATH['proc_data'] = abspath(pjoin(PATH['data'], 'proc_data'))
 PATH['test_data'] = abspath(pjoin(PATH['data'], 'test_data'))
+

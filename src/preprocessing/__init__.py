@@ -12,16 +12,6 @@ def preproc_train(funcs):
         for cnt, filename in enumerate(files):
             with open(pjoin(PATH['raw_data'], filename), encoding='latin-1') as f:
                 raw_s = f.read()
-            funcs = [
-                remove_evil_ms_linebreak,
-                replace_linebreak_to_space,
-                replace_tab_to_space,
-                proceed_quote,
-                proceed_brackets,
-                remove_weird_chars,
-                proceed_punctuation,
-                remove_reductant_space,
-            ]
             res = rcompose(funcs)(raw_s)
             prog.update(cnt+1)
             yield res
@@ -73,3 +63,10 @@ def remove_weird_chars(s):
     res = re.sub(r'[^A-Za-z0-9\'.:;?!,]', ' ', s)
     return res
     
+def to_lowercase(s):
+    return s.lower()
+
+def add_sentence_tag(s):
+    res = s.split('\n')
+    res = ['<s> ' + sent[:-1] + '</s>' for sent in res]
+    return '\n'.join(res) 
