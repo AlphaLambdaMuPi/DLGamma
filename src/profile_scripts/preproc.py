@@ -3,10 +3,13 @@ from preprocessing import *
 from profile import BaseProfile
 from settings import *
 from os.path import join as pjoin
+import os
 
 
 class Profile(BaseProfile):
     def start(self):
+        if not os.path.isdir(PATH['proc_data']):
+            os.mkdir(PATH['proc_data'])
         funcs = [
             remove_evil_ms_linebreak,
             replace_linebreak_to_space,

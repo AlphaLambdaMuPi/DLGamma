@@ -1,9 +1,11 @@
 from profile import BaseProfile
 from settings import *
+from utils import check_path
 import re
 
 class Profile(BaseProfile):
     def start(self):
+        check_path(PATH['test_data'], create=True)
         with open(pjoin(PATH['test_data'], 'test.in'), 'w') as fw, \
              open(pjoin(PATH['data'], 'testing_data.txt')) as f, \
              open(pjoin(PATH['data'], 'correct', 'MSR_Sentence_Completion_Challenge_V1',
