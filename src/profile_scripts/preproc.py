@@ -7,6 +7,7 @@ import os
 
 
 class Profile(BaseProfile):
+    desc = ''' Do all the init. '''
     def start(self):
         if not os.path.isdir(PATH['proc_data']):
             os.mkdir(PATH['proc_data'])
@@ -26,4 +27,7 @@ class Profile(BaseProfile):
         with open(pjoin(PATH['proc_data'], 'train_sentences.txt'), 'w') as f:
             for s in preproc_train(funcs):
                 f.write(s)
+
+        from preproc.stats import make
+        make()
 

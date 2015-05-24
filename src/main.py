@@ -19,14 +19,29 @@ class Main():
             self.run(s)
 
     def run(self, profile):
-        P = importlib.import_module('profile_scripts.{}'.format(profile))
+        if profile == 'list':
+            ls = os.listdir('profile_scripts')
+            for f in filter(lambda x: x[-3:] == '.py', ls):
+                P = importlib.import_module('profile_scripts.{}'.format(f[:-3]))
+                try:
+                    ex = P.Profile()
+                    print('{} : {}'.format(f, getattr(ex, 'desc', '')))
+                except Exception:
+                    print('the profile {} is a concon file'.format(f))
+            return
+                
+        try:
+            P = importlib.import_module('profile_scripts.{}'.format(profile))
+        except ImportError:
+            print('Profile {} not found.'.format(profile))
+
         ex = P.Profile()
         try:
-          ex.start()
+            ex.start()
         except KeyboardInterrupt:
-          pass
+            pass
         finally:
-          ex.end()
+            ex.end()
 
 def main():
     Main()
