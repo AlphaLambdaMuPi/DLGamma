@@ -20,7 +20,7 @@ class Main():
 
     def run(self, profile):
         if profile == 'list':
-            ls = os.listdir('profile_scripts')
+            ls = os.listdir(os.path.join(PATH['src'], 'profile_scripts'))
             for f in filter(lambda x: x[-3:] == '.py', ls):
                 P = importlib.import_module('profile_scripts.{}'.format(f[:-3]))
                 try:
