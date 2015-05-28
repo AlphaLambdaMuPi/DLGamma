@@ -20,5 +20,6 @@ DATA['word_list_test'] = abspath(pjoin(PATH['proc_data'], 'word_list_test'))
 DATA['train_sentences'] = abspath(pjoin(PATH['proc_data'], 'train_sentences.txt'))
 DATA['stats'] = abspath(pjoin(PATH['proc_data'], 'stats'))
 DATA['stats_test'] = abspath(pjoin(PATH['proc_data'], 'stats_test'))
-DATA['questions'] = abspath(pjoin(PATH['test_data'], 'questions.txt'))
+DATA['test_sentences'] = abspath(pjoin(PATH['test_data'], 'questions.txt'))
+DATA['test_answers'] = abspath(pjoin(PATH['test_data'], 'answers.txt'))
 

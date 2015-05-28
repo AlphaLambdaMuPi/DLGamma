@@ -12,5 +12,11 @@ for i, x in enumerate(wl):
 V = np.load(DATA['word2vec.npy'])
 
 def word2vec(w):
+    if w not in M:
+        v = np.hstack((
+            np.zeros(300),
+            np.array([1.])
+        ))
+        return v
     return V[M[w]]
 

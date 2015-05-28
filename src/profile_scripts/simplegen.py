@@ -8,8 +8,7 @@ import os
 
 class Profile(BaseProfile):
     def start(self):
-        from generate import generate_all, generate_bidirect_all
-        #generate_all(name = 'train1', max_occ = 30)
-        generate_bidirect_all(name = 'trainbi', max_occ = 30)
+        from generate import generate_all
+        generate_all(name = 'train0', max_occ = 30)
 
 
